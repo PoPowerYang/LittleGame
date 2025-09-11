@@ -1,0 +1,40 @@
+{
+  "name": "Pixel Game Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": {
+      "label": "Vite Dev Server",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "sudo corepack enable && yes | yarn install && curl -fsSL https://claude.ai/install.sh | bash && echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.bashrc && echo 'export ANTHROPIC_BASE_URL=\"https://claude.nonocode.cn/api\"' >> ~/.bashrc && echo 'export ANTHROPIC_AUTH_TOKEN=\"cr_8926446cdf5dffedff94775afd111b2f238f774f0d6663fabb447eff70d8da5a\"' >> ~/.bashrc",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-json",
+        "saoudrizwan.claude-dev",
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "terminal.integrated.env.linux": {
+          "ANTHROPIC_BASE_URL": "https://claude.nonocode.cn/api",
+          "ANTHROPIC_AUTH_TOKEN": "cr_8926446cdf5dffedff94775afd111b2f238f774f0d6663fabb447eff70d8da5a"
+        }
+      }
+    }
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  ],
+  "workspaceFolder": "/workspace"
+}
