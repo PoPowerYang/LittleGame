@@ -1,0 +1,108 @@
+import { ZodiacSign } from '../types'
+
+export const zodiacSigns: ZodiacSign[] = [
+  {
+    id: 'aries',
+    name: '白羊座',
+    nameEn: 'Aries',
+    element: '火',
+    dates: '3月21日 - 4月19日',
+    symbol: '♈',
+  },
+  {
+    id: 'taurus',
+    name: '金牛座',
+    nameEn: 'Taurus',
+    element: '土',
+    dates: '4月20日 - 5月20日',
+    symbol: '♉',
+  },
+  {
+    id: 'gemini',
+    name: '双子座',
+    nameEn: 'Gemini',
+    element: '风',
+    dates: '5月21日 - 6月20日',
+    symbol: '♊',
+  },
+  {
+    id: 'cancer',
+    name: '巨蟹座',
+    nameEn: 'Cancer',
+    element: '水',
+    dates: '6月21日 - 7月22日',
+    symbol: '♋',
+  },
+  {
+    id: 'leo',
+    name: '狮子座',
+    nameEn: 'Leo',
+    element: '火',
+    dates: '7月23日 - 8月22日',
+    symbol: '♌',
+  },
+  {
+    id: 'virgo',
+    name: '处女座',
+    nameEn: 'Virgo',
+    element: '土',
+    dates: '8月23日 - 9月22日',
+    symbol: '♍',
+  },
+  {
+    id: 'libra',
+    name: '天秤座',
+    nameEn: 'Libra',
+    element: '风',
+    dates: '9月23日 - 10月22日',
+    symbol: '♎',
+  },
+  {
+    id: 'scorpio',
+    name: '天蝎座',
+    nameEn: 'Scorpio',
+    element: '水',
+    dates: '10月23日 - 11月21日',
+    symbol: '♏',
+  },
+  {
+    id: 'sagittarius',
+    name: '射手座',
+    nameEn: 'Sagittarius',
+    element: '火',
+    dates: '11月22日 - 12月21日',
+    symbol: '♐',
+  },
+  {
+    id: 'capricorn',
+    name: '摩羯座',
+    nameEn: 'Capricorn',
+    element: '土',
+    dates: '12月22日 - 1月19日',
+    symbol: '♑',
+  },
+  {
+    id: 'aquarius',
+    name: '水瓶座',
+    nameEn: 'Aquarius',
+    element: '风',
+    dates: '1月20日 - 2月18日',
+    symbol: '♒',
+  },
+  {
+    id: 'pisces',
+    name: '双鱼座',
+    nameEn: 'Pisces',
+    element: '水',
+    dates: '2月19日 - 3月20日',
+    symbol: '♓',
+  },
+]
+
+export const fortuneDescriptions = {
+  love: ['桃花运旺盛，有望遇到心仪对象', '感情稳定发展，互相理解', '需要多沟通，避免误会', '单身者要主动出击', '恋爱中的你们甜蜜如初'],
+  career: ['工作运势强劲，有升职加薪机会', '项目进展顺利，获得上司认可', '需要谨慎处理人际关系', '适合学习新技能提升自己', '团队合作将带来好结果'],
+  health: ['身体状况良好，精神饱满', '注意休息，避免过度劳累', '适合运动锻炼，增强体质', '饮食要规律，营养均衡', '心情愉悦有助健康'],
+  fortune: ['财运亨通，有意外收入', '投资需谨慎，避免盲目跟风', '正财运不错，工作收入稳定', '偏财运平平，不宜投机', '理财有道，积少成多'],
+  overall: ['今日整体运势上升，诸事顺利', '保持平常心，稳中求进', '挑战与机遇并存，勇敢面对', '贵人运强，多与他人交流', '心想事成，好运连连']
+}
