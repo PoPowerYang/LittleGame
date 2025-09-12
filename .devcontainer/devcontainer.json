@@ -1,5 +1,5 @@
 {
-  "name": "Pixel Game Dev Environment",
+  "name": "Divination App Dev Environment",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
@@ -19,6 +19,10 @@
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
         "ms-vscode.vscode-json",
+        "dsznajder.es7-react-js-snippets",
+        "formulahendry.auto-rename-tag",
+        "PKief.material-icon-theme",
+        "zhuangtongfa.material-theme",
         "saoudrizwan.claude-dev",
         "anthropic.claude-code"
       ],
@@ -26,6 +30,14 @@
         "typescript.preferences.importModuleSpecifier": "relative",
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "workbench.iconTheme": "material-icon-theme",
+        "workbench.colorTheme": "One Dark Pro",
+        "emmet.includeLanguages": {
+          "javascript": "javascriptreact"
+        },
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
         "terminal.integrated.env.linux": {
           "ANTHROPIC_BASE_URL": "https://claude.nonocode.cn/api",
           "ANTHROPIC_AUTH_TOKEN": "cr_8926446cdf5dffedff94775afd111b2f238f774f0d6663fabb447eff70d8da5a"
