@@ -20,6 +20,8 @@ export interface TarotReading {
   cards: DrawnCard[]
   interpretation: string
   layout: 'single' | 'three' | 'cross'
+  source?: 'ai' | 'traditional'
+  error?: string
 }
 
 export interface DrawnCard {

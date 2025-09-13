@@ -1,5 +1,6 @@
 import { TarotCard, DrawnCard, TarotReading } from '../types'
 import { tarotCards } from '../data/tarotCards'
+import aiService, { AIResponse } from '../services/aiService'
 
 export const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array]
@@ -34,7 +35,7 @@ const getPositionName = (index: number, totalCards: number): string => {
   return `位置 ${index + 1}`
 }
 
-export const interpretReading = (cards: DrawnCard[], question: string): string => {
+export const interpretReadingTraditional = (cards: DrawnCard[], question: string): string => {
   const interpretations: string[] = []
   
   cards.forEach((drawnCard, index) => {
@@ -61,20 +62,70 @@ export const interpretReading = (cards: DrawnCard[], question: string): string =
   return interpretations.join('\n\n')
 }
 
-export const createTarotReading = (
+export const interpretReading = async (
+  cards: DrawnCard[], 
+  question: string, 
+  layout: 'single' | 'three' | 'cross' = 'single'
+): Promise<{ interpretation: string; source: 'ai' | 'traditional'; error?: string }> => {
+  // Always try AI first if available
+  if (aiService.isReady()) {
+    try {
+      const aiResponse: AIResponse = await aiService.generateTarotInterpretation(
+        cards, 
+        question, 
+        getLayoutName(layout)
+      )
+      
+      if (aiResponse.success && aiResponse.interpretation) {
+        return {
+          interpretation: aiResponse.interpretation,
+          source: 'ai'
+        }
+      } else if (aiResponse.error) {
+        console.warn('AI解读失败，使用传统解读:', aiResponse.error)
+      }
+    } catch (error) {
+      console.warn('AI解读异常，使用传统解读:', error)
+    }
+  }
+  
+  // Fallback to traditional interpretation
+  const traditionalInterpretation = interpretReadingTraditional(cards, question)
+  return {
+    interpretation: traditionalInterpretation,
+    source: 'traditional'
+  }
+}
+
+const getLayoutName = (layout: 'single' | 'three' | 'cross'): string => {
+  switch (layout) {
+    case 'single':
+      return '单牌解读'
+    case 'three':
+      return '三牌过去现在未来牌阵'
+    case 'cross':
+      return '五牌十字牌阵'
+    default:
+      return '塔罗牌阵'
+  }
+}
+
+export const createTarotReading = async (
   question: string,
   layout: 'single' | 'three' | 'cross'
-): TarotReading => {
+): Promise<TarotReading & { source: 'ai' | 'traditional'; error?: string }> => {
   const cardCount = layout === 'single' ? 1 : layout === 'three' ? 3 : 5
   const cards = drawCards(cardCount)
-  const interpretation = interpretReading(cards, question)
+  const result = await interpretReading(cards, question, layout)
   
   return {
     id: Date.now().toString(),
     date: new Date(),
     question,
     cards,
-    interpretation,
-    layout
+    interpretation: result.interpretation,
+    layout,
+    source: result.source,
+    error: result.error
   }
 }

@@ -68,7 +68,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
               activeOpacity={0.8}
             >
               <LinearGradient
-                colors={option.colors}
+                colors={option.colors as any}
                 style={styles.cardGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}

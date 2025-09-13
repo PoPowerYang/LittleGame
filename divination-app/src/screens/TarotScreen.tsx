@@ -27,6 +27,11 @@ const TarotScreen: React.FC = () => {
   const [reading, setReading] = useState<TarotReading | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [isReading, setIsReading] = useState(false)
+  const [aiStatus, setAiStatus] = useState<{
+    isLoading: boolean
+    source: 'ai' | 'traditional' | null
+    error?: string
+  }>({ isLoading: false, source: null })
   const [cardsRevealed, setCardsRevealed] = useState<boolean[]>([])
   const spinValue = React.useRef(new Animated.Value(0)).current
   const pulseValue = React.useRef(new Animated.Value(1)).current
@@ -185,11 +190,29 @@ const TarotScreen: React.FC = () => {
     
     // 模拟占卜过程
     setTimeout(async () => {
-      const newReading = createTarotReading(question, selectedLayout)
-      await saveTarotReading(newReading)
-      setReading(newReading)
-      setIsReading(false)
-      setShowResult(true)
+      try {
+        setAiStatus({ isLoading: true, source: null })
+        
+        const newReading = await createTarotReading(question, selectedLayout)
+        await saveTarotReading(newReading)
+        
+        setReading(newReading)
+        setAiStatus({ 
+          isLoading: false, 
+          source: newReading.source || 'traditional',
+          error: newReading.error 
+        })
+        setIsReading(false)
+        setShowResult(true)
+      } catch (error) {
+        console.error('占卜过程出错:', error)
+        setAiStatus({ 
+          isLoading: false, 
+          source: 'traditional',
+          error: '生成解读时出现错误，已使用传统解读' 
+        })
+        setIsReading(false)
+      }
     }, 2000)
   }
 
@@ -198,6 +221,7 @@ const TarotScreen: React.FC = () => {
     setShowResult(false)
     setQuestion('')
     setCardsRevealed([])
+    setAiStatus({ isLoading: false, source: null })
     cardAnimations.current = []
     cardFlipAnimations.current = []
     cardScaleAnimations.current = []
@@ -510,7 +534,32 @@ const TarotScreen: React.FC = () => {
                     </Animated.View>
 
                     <View style={styles.interpretationSection}>
-                      <Text style={styles.interpretationTitle}>解读</Text>
+                      <View style={styles.interpretationHeader}>
+                        <Text style={styles.interpretationTitle}>解读</Text>
+                        {aiStatus.source && (
+                          <View style={[
+                            styles.sourceIndicator,
+                            aiStatus.source === 'ai' ? styles.aiIndicator : styles.traditionalIndicator
+                          ]}>
+                            <Ionicons 
+                              name={aiStatus.source === 'ai' ? 'sparkles' : 'book'} 
+                              size={12} 
+                              color="#ffffff" 
+                            />
+                            <Text style={styles.sourceText}>
+                              {aiStatus.source === 'ai' ? 'AI解读' : '传统解读'}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                      
+                      {aiStatus.error && (
+                        <View style={styles.errorContainer}>
+                          <Ionicons name="warning" size={16} color="#F59E0B" />
+                          <Text style={styles.errorText}>{aiStatus.error}</Text>
+                        </View>
+                      )}
+                      
                       <Text style={styles.interpretationText}>{reading.interpretation}</Text>
                     </View>
                   </>
@@ -788,11 +837,49 @@ const styles = StyleSheet.create({
   interpretationSection: {
     marginTop: 20,
   },
+  interpretationHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   interpretationTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#ffffff',
+  },
+  sourceIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  aiIndicator: {
+    backgroundColor: 'rgba(168, 85, 247, 0.3)',
+  },
+  traditionalIndicator: {
+    backgroundColor: 'rgba(156, 163, 175, 0.3)',
+  },
+  sourceText: {
+    fontSize: 10,
+    color: '#ffffff',
+    marginLeft: 4,
+    fontWeight: '500',
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+    borderRadius: 8,
+    padding: 12,
     marginBottom: 16,
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#F59E0B',
+    marginLeft: 8,
+    flex: 1,
   },
   interpretationText: {
     fontSize: 16,
